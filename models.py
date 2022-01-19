@@ -33,7 +33,7 @@ class _UpScale(nn.Sequential):
 class Flatten(nn.Module):
 
     def forward(self, input):
-        output = input.view(input.size(0), -1)
+        output = input.reshape(input.size(0), -1)
         return output
 
 

@@ -130,13 +130,13 @@ def main(args):
         # original files, autoencoded files, faceswapped files
         figure_A = np.stack([
             test_A,
-            # var_to_np(model(test_A_, 'A')),
-            # var_to_np(model(test_A_, 'B')),
+            var_to_np(model(test_A_, 'A')),
+            var_to_np(model(test_A_, 'B')),
         ], axis=1)
         figure_B = np.stack([
             test_B,
-            # var_to_np(model(test_B_, 'B')),
-            # var_to_np(model(test_B_, 'A')),
+            var_to_np(model(test_B_, 'B')),
+            var_to_np(model(test_B_, 'A')),
         ], axis=1)
 
         figure = np.concatenate([figure_A, figure_B], axis=0)

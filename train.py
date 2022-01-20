@@ -47,13 +47,14 @@ def main(args):
     # Load png/jpg files
     print('===> Loading datasets')
     if opt.crawling:
-        from icrawler.builtin import GoogleImageCrawler
-        google_crawler = GoogleImageCrawler(storage={'root_dir':'data/trump'})
-        google_crawler.crawl(keyword='Donald Trump', max_num=100)
-        google_crawler = GoogleImageCrawler(storage={'root_dir':'data/cage'})
-        google_crawler.crawl(keyword='Nicolas Cage', max_num=100)
-    images_A = get_image_paths("data/trump")
-    images_B = get_image_paths("data/cage")
+        from icrawler.builtin import GoogleImageCrawler, BingImageCrawler
+        crawler = BingImageCrawler(storage={'root_dir':'data/holland'}, feeder_threads=2, parser_threads=2, downloader_threads=4)
+        crawler.crawl(keyword='Tom Holland', max_num=1000)
+        crawler = BingImageCrawler(storage={'root_dir':'data/chalamet'}, feeder_threads=2, parser_threads=2, downloader_threads=4)
+        crawler.crawl(keyword='Timothee Chalamet ', max_num=1000)
+        return
+    images_A = get_image_paths("data/holland")
+    images_B = get_image_paths("data/chalamet")
     
     # Resize input files 
     images_A = load_images(images_A) / 255.0

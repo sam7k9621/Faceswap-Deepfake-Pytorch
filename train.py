@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 import torch
 
-from tqdm.notebook import tqdm
+from tqdm.auto import trange
 from torch import nn, optim
 from torch.nn import functional as F
 from torch.backends import cudnn
@@ -45,7 +45,7 @@ def main(args):
 
 
     # Load png/jpg files
-    print('===> Loaing datasets')
+    print('===> Loading datasets')
     if opt.crawling:
         from icrawler.builtin import GoogleImageCrawler
         google_crawler = GoogleImageCrawler(storage={'root_dir':'data/trump'})
@@ -84,7 +84,7 @@ def main(args):
         optimizer_2.load_state_dict(checkpoint['optimizer2_state_dict'])
     
     print('===> Start from last epoch: {}'.format(start_epoch))
-    for epoch in tqdm(range(start_epoch, opt.epochs)):
+    for epoch in trange(start_epoch, opt.epochs):
         batch_size = opt.batch_size
 
         warped_A, target_A = get_training_data(images_A, batch_size)

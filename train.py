@@ -99,37 +99,33 @@ def main(args):
         warped_B = warped_B.to(device).float()
         target_B = target_B.to(device).float()
 
-        # optimizer_1.zero_grad()
-        # optimizer_2.zero_grad()
+        optimizer_1.zero_grad()
+        optimizer_2.zero_grad()
 
-        # warped_A = model(warped_A, 'A')
-        # warped_B = model(warped_B, 'B')
+        warped_A = model(warped_A, 'A')
+        warped_B = model(warped_B, 'B')
 
-        # loss1 = criterion(warped_A, target_A)
-        # loss2 = criterion(warped_B, target_B)
-        # loss1.backward()
-        # loss2.backward()
-        # optimizer_1.step()
-        # optimizer_2.step()
+        loss1 = criterion(warped_A, target_A)
+        loss2 = criterion(warped_B, target_B)
+        loss1.backward()
+        loss2.backward()
+        optimizer_1.step()
+        optimizer_2.step()
 
-        test_A_ = target_A[0:14]
-        test_B_ = target_B[0:14]
-        test_A = var_to_np(target_A[0:14])
-        test_B = var_to_np(target_B[0:14])
-        # if epoch % opt.log_interval == 0:
-            # test_A_ = target_A[0:14]
-            # test_B_ = target_B[0:14]
-            # test_A = var_to_np(target_A[0:14])
-            # test_B = var_to_np(target_B[0:14])
-            # state = {
-                # 'state': model.state_dict(),
-                # 'epoch': epoch,
-                # 'optimizer1_state_dict': optimizer_1.state_dict(),
-                # 'optimizer2_state_dict': optimizer_2.state_dict(),
-            # }
-            # if not os.path.isdir('checkpoint'):
-                # os.mkdir('checkpoint')
-            # torch.save(state, './checkpoint/autoencoder.t7')
+        if epoch % opt.log_interval == 0:
+            test_A_ = target_A[0:14]
+            test_B_ = target_B[0:14]
+            test_A = var_to_np(target_A[0:14])
+            test_B = var_to_np(target_B[0:14])
+            state = {
+                'state': model.state_dict(),
+                'epoch': epoch,
+                'optimizer1_state_dict': optimizer_1.state_dict(),
+                'optimizer2_state_dict': optimizer_2.state_dict(),
+            }
+            if not os.path.isdir('checkpoint'):
+                os.mkdir('checkpoint')
+            torch.save(state, './checkpoint/autoencoder.t7')
 
         # original files, autoencoded files, faceswapped files
         figure_A = np.stack([

@@ -7,13 +7,12 @@ def get_image_paths(directory):
     return [x.path for x in os.scandir(directory) if x.name.endswith(".jpg") or x.name.endswith(".png")
             or x.name.endswith(".JPG")]
 
-
-def load_images(image_paths, convert=None):
+def load_images(image_paths):
     iter_all_images = (cv2.resize(cv2.imread(fn), (256, 256)) for fn in image_paths)
-    if convert:
-        iter_all_images = (convert(img) for img in iter_all_images)
+    
     for i, image in enumerate(iter_all_images):
         if i == 0:
+            # Build 4-d tensor
             all_images = numpy.empty((len(image_paths),) + image.shape, dtype=image.dtype)
         all_images[i] = image
     return all_images

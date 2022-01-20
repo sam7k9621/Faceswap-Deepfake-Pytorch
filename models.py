@@ -44,7 +44,7 @@ class Reshape(nn.Module):
 
         return output
 
-
+# Remain the input file information (channel*width*height) while resizing it
 class _PixelShuffler(nn.Module):
     def forward(self, input):
         batch_size, c, h, w = input.size()
@@ -54,10 +54,9 @@ class _PixelShuffler(nn.Module):
         out = input.view(batch_size, rh, rw, oc, h, w)
         out = out.permute(0, 3, 4, 1, 5, 2).contiguous()
         out = out.view(batch_size, oc, oh, ow)  # channel first
-
         return out
 
-
+# Unsupervised Learning
 class Autoencoder(nn.Module):
     def __init__(self):
         super(Autoencoder, self).__init__()

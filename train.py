@@ -125,7 +125,7 @@ def main(args):
             }
             if not os.path.isdir('checkpoint'):
                 os.mkdir('checkpoint')
-            torch.save(state, './checkpoint/autoencoder.t7')
+            torch.save(state, './checkpoint/autoencoder.t7', _use_new_zipfile_serialization=False)
 
         # original files, autoencoded files, faceswapped files
         figure_A = np.stack([

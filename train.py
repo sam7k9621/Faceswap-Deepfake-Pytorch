@@ -75,7 +75,7 @@ def main(args):
 
     if os.path.isdir('checkpoint'):
         try:
-            checkpoint = torch.load('./checkpoint/autoencoder.t7')
+            checkpoint = torch.load('./checkpoint/autoencoder_epoch3800.t7')
         except FileNotFoundError:
             print('Can\'t found autoencoder.t7')
             raise

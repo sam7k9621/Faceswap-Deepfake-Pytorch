@@ -75,7 +75,7 @@ def main(args):
 
     if os.path.isdir('checkpoint'):
         try:
-            checkpoint = torch.load('./checkpoint/autoencoder_epoch3800.t7')
+            checkpoint = torch.load('./checkpoint/autoencoder.t7')
         except FileNotFoundError:
             print('Can\'t found autoencoder.t7')
             raise
@@ -112,7 +112,9 @@ def main(args):
         optimizer_1.step()
         optimizer_2.step()
 
+
         if epoch % opt.log_interval == 0:
+            print('epoch: {}, lossA:{}, lossB:{}'.format(epoch, loss1.item(), loss2.item()))
             test_A_ = target_A[0:14]
             test_B_ = target_B[0:14]
             test_A = var_to_np(target_A[0:14])
@@ -125,27 +127,27 @@ def main(args):
             }
             if not os.path.isdir('checkpoint'):
                 os.mkdir('checkpoint')
-            torch.save(state, './checkpoint/autoencoder_epoch{}.t7'.format(epoch), _use_new_zipfile_serialization=False)
+            torch.save(state, './checkpoint/autoencoder.t7'.format(epoch), _use_new_zipfile_serialization=False)
 
-        # original files, autoencoded files, faceswapped files
-        figure_A = np.stack([
-            test_A,
-            var_to_np(model(test_A_, 'A')),
-            var_to_np(model(test_A_, 'B')),
-        ], axis=1)
-        figure_B = np.stack([
-            test_B,
-            var_to_np(model(test_B_, 'B')),
-            var_to_np(model(test_B_, 'A')),
-        ], axis=1)
+            # original files, autoencoded files, faceswapped files
+            figure_A = np.stack([
+                test_A,
+                var_to_np(model(test_A_, 'A')),
+                var_to_np(model(test_A_, 'B')),
+            ], axis=1)
+            figure_B = np.stack([
+                test_B,
+                var_to_np(model(test_B_, 'B')),
+                var_to_np(model(test_B_, 'A')),
+            ], axis=1)
 
-        figure = np.concatenate([figure_A, figure_B], axis=0)
-        figure = figure.transpose((0, 1, 3, 4, 2))
-        figure = figure.reshape((4, 7) + figure.shape[1:])
-        figure = stack_images(figure)
+            figure = np.concatenate([figure_A, figure_B], axis=0)
+            figure = figure.transpose((0, 1, 3, 4, 2))
+            figure = figure.reshape((4, 7) + figure.shape[1:])
+            figure = stack_images(figure)
 
-        figure = np.clip(figure * 255, 0, 255).astype('uint8')
-        cv2.imwrite('output.jpg', figure)
+            figure = np.clip(figure * 255, 0, 255).astype('uint8')
+            cv2.imwrite('output.jpg', figure)
 
 if __name__ == "__main__":
     main(sys.argv)
